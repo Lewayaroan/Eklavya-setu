@@ -1,4 +1,4 @@
-# Eklavya Setu (एकलव्य सेतु)
+# Eklavya Setu 
 ### Unified Mobile Scholarship Portal & JAGO AI Voice Assistant for Tribal Students
 **Smart India Hackathon 2026** | **Problem Statement ID: SIH26238**  
 **Ministry:** Ministry of Tribal Affairs (MoTA) | **Theme:** Smart Automation / Software
