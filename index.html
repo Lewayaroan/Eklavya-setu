@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eklavya Setu - Unified Tribal Scholarship Portal & JAGO AI Voice Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f6f2;
+            color: #292524;
+        }
+        .bg-forest { background-color: #2c4a3e; }
+        .text-forest { color: #2c4a3e; }
+        .hover-bg-forest:hover { background-color: #1e332b; }
+        .border-forest { border-color: #2c4a3e; }
+
+        .bg-terracotta { background-color: #c96f53; }
+        .text-terracotta { color: #c96f53; }
+        .hover-bg-terracotta:hover { background-color: #b05c42; }
+        .border-terracotta { border-color: #c96f53; }
+
+        .tab-btn.active-tab {
+            background-color: #2c4a3e;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(44, 74, 62, 0.2);
+        }
+        .tab-btn.active-tab i {
+            color: #ffffff !important;
+        }
+        .tab-btn:not(.active-tab) {
+            color: #57534e;
+        }
+        .tab-btn:not(.active-tab):hover {
+            background-color: #f5f5f4;
+            color: #1c1917;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .mic-pulsing {
+            animation: pulse-ring 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-16 md:pb-0">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-forest text-white shadow-md px-4 sm:px-6 py-3.5 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="h-10 w-10 rounded-full bg-white flex items-center justify-center text-forest font-bold text-xl shadow-inner">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-lg font-bold leading-tight tracking-tight">Eklavya Setu</h1>
+                    <span class="bg-emerald-800 text-[10px] text-emerald-200 px-2 py-0.5 rounded font-semibold uppercase tracking-wider">MoTA • SIH26238</span>
+                </div>
+                <p class="text-xs text-emerald-200">Unified Tribal Scholarship Portal & JAGO AI Voice Assistant</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div id="student-badge" class="bg-terracotta text-white text-xs px-3 py-1.5 rounded-full font-semibold flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-user-check"></i>
+                <span id="badge-student-name">Ananya Soren (Ranchi, JH) • APAAR: 9482-1049-5821</span>
+            </div>
+            <button onclick="toggleProfile()" title="Switch Demo Profile" class="text-white hover:text-emerald-200 text-xs px-2.5 py-1.5 rounded-lg border border-white/20 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span class="hidden sm:inline">Switch Profile</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container Layout -->
+    <div class="flex-grow flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 md:p-6 gap-6">
+        
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="hidden md:flex flex-col w-64 bg-white rounded-2xl shadow-sm border border-stone-200 p-4 h-fit gap-1.5 shrink-0">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-3 py-1">Scholarship Hub</div>
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="tab-btn active-tab flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition w-full text-left">
+                <i class="fa-solid fa-table-columns text-base w-5"></i> 5-Scheme Dashboard
+            </button>
+            <button onclick="switchTab('jago')" id="btn-jago" class="tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition w-full text-left">
+                <i class="fa-solid fa-microphone-lines text-base w-5 text-terracotta"></i> JAGO Voice AI
+            </button>
+            <button onclick="switchTab('verification')" id="btn-verification" class="tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition w-full text-left">
+                <i class="fa-solid fa-id-card-clip text-base w-5"></i> DigiLocker & APAAR
+            </button>
+            <button onclick="switchTab('schemes')" id="btn-schemes" class="tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition w-full text-left">
+                <i class="fa-solid fa-shield-halved text-base w-5"></i> Single-Avail Guard
+            </button>
+            <button onclick="switchTab('outreach')" id="btn-outreach" class="tab-btn flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium transition w-full text-left">
+                <i class="fa-solid fa-satellite-dish text-base w-5"></i> Zero-Dropout Radar
+            </button>
+
+            <div class="border-t border-stone-200 my-2 pt-2">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-stone-400 px-3 py-1">MoTA Directives</div>
+                <div class="px-3 py-2 text-xs text-stone-500 bg-stone-50 rounded-xl border border-stone-200 space-y-1.5">
+                    <div class="flex items-center justify-between text-forest font-semibold">
+                        <span>Unified Portals:</span>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">3 in 1</span>
+                    </div>
+                    <div class="text-[11px] text-stone-600">NSP + Canara Bank SFMP + Overseas (NOS)</div>
+                    <div class="flex items-center gap-1.5 text-[10px] text-emerald-700 font-medium pt-1">
+                        <i class="fa-solid fa-circle-check"></i> Single-Claim Rule Active
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow min-w-0">
+
+            <!-- TAB 1: 5-SCHEME UNIFIED DASHBOARD -->
+            <section id="tab-dashboard" class="tab-content space-y-6">
+                <!-- Welcome Banner -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm flex flex-col lg:flex-row justify-between lg:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">One-Student-One-View</span>
+                            <span class="text-xs text-stone-400">•</span>
+                            <span class="text-xs text-stone-500">Academic Year 2026-27</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-800 mt-1" id="dash-greeting">Welcome back, Ananya Soren</h2>
+                        <p class="text-stone-600 text-sm mt-0.5">Tracking your active tribal scholarship across national systems without paper re-submissions.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="bg-stone-50 border border-stone-200 px-4 py-2.5 rounded-xl flex items-center gap-3">
+                            <div class="h-9 w-9 rounded-full bg-emerald-100 text-forest flex items-center justify-center font-bold">
+                                <i class="fa-solid fa-building-columns"></i>
+                            </div>
+                            <div>
+                                <div class="text-[10px] text-stone-500 font-semibold uppercase">DBT Bank Status</div>
+                                <div class="text-xs font-bold text-emerald-700 flex items-center gap-1">
+                                    <i class="fa-solid fa-check-circle"></i> Aadhaar Seeded (SBI)
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="switchTab('jago')" class="bg-forest hover-bg-forest text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-microphone"></i> Ask JAGO
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4 High-Impact Metric Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+                        <div class="flex justify-between items-center text-stone-500 text-xs font-semibold">
+                            <span>ACTIVE SCHEME</span>
+                            <i class="fa-solid fa-award text-forest text-sm"></i>
+                        </div>
+                        <div class="text-lg font-bold text-stone-800 mt-2" id="metric-scheme-name">Post-Matric ST</div>
+                        <div class="text-xs text-emerald-700 mt-1 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check"></i> Institute Verified (BIT Mesra)
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+                        <div class="flex justify-between items-center text-stone-500 text-xs font-semibold">
+                            <span>SANCTIONED AMOUNT</span>
+                            <i class="fa-solid fa-indian-rupee-sign text-terracotta text-sm"></i>
+                        </div>
+                        <div class="text-lg font-bold text-stone-800 mt-2" id="metric-amount">₹ 42,000 / Year</div>
+                        <div class="text-xs text-stone-500 mt-1">Tuition + Maintenance Allowance</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+                        <div class="flex justify-between items-center text-stone-500 text-xs font-semibold">
+                            <span>CURRENT STAGE</span>
+                            <i class="fa-solid fa-clock-rotate-left text-amber-600 text-sm"></i>
+                        </div>
+                        <div class="text-lg font-bold text-amber-700 mt-2" id="metric-stage">State Nodal Review</div>
+                        <div class="text-xs text-stone-500 mt-1">Est. Disbursement in 7 Days</div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-4 border border-stone-200 shadow-sm">
+                        <div class="flex justify-between items-center text-stone-500 text-xs font-semibold">
+                            <span>DUAL-CLAIM GUARD</span>
+                            <i class="fa-solid fa-shield-check text-emerald-600 text-sm"></i>
+                        </div>
+                        <div class="text-lg font-bold text-emerald-700 mt-2">Zero Conflict</div>
+                        <div class="text-xs text-stone-500 mt-1">De-duplicated across NSP & SFMP</div>
+                    </div>
+                </div>
+
+                <!-- Live Application Lifecycle Stepper -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-base font-bold text-stone-800">Unified Application Lifecycle Tracking</h3>
+                            <p class="text-xs text-stone-500">Live API sync between National Scholarship Portal (NSP) & PFMS DBT servers</p>
+                        </div>
+                        <span class="text-xs bg-stone-100 text-stone-700 px-3 py-1 rounded-full font-mono font-medium">App ID: MOTA-JH-2026-78419</span>
+                    </div>
+
+                    <!-- Visual Progress Stepper -->
+                    <div class="relative flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-2">
+                        <!-- Step 1 -->
+                        <div class="flex md:flex-col items-center gap-3 md:gap-2 text-left md:text-center w-full md:w-1/4">
+                            <div class="h-10 w-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-stone-800">1. DigiLocker Fill</div>
+                                <div class="text-[11px] text-stone-500">Auto-verified on 14 Aug</div>
+                            </div>
+                        </div>
+                        <!-- Connector 1 -->
+                        <div class="hidden md:block h-1 w-full bg-emerald-500 rounded"></div>
+
+                        <!-- Step 2 -->
+                        <div class="flex md:flex-col items-center gap-3 md:gap-2 text-left md:text-center w-full md:w-1/4">
+                            <div class="h-10 w-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-md">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-stone-800">2. College Nodal</div>
+                                <div class="text-[11px] text-stone-500">BIT Mesra verified</div>
+                            </div>
+                        </div>
+                        <!-- Connector 2 -->
+                        <div class="hidden md:block h-1 w-full bg-amber-400 rounded"></div>
+
+                        <!-- Step 3 -->
+                        <div class="flex md:flex-col items-center gap-3 md:gap-2 text-left md:text-center w-full md:w-1/4">
+                            <div class="h-10 w-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm shadow-md animate-pulse">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-amber-700">3. State Welfare Officer</div>
+                                <div class="text-[11px] text-stone-500">In final batch sanction</div>
+                            </div>
+                        </div>
+                        <!-- Connector 3 -->
+                        <div class="hidden md:block h-1 w-full bg-stone-200 rounded"></div>
+
+                        <!-- Step 4 -->
+                        <div class="flex md:flex-col items-center gap-3 md:gap-2 text-left md:text-center w-full md:w-1/4">
+                            <div class="h-10 w-10 rounded-full bg-stone-200 text-stone-400 flex items-center justify-center font-bold text-sm">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-stone-400">4. PFMS DBT Credit</div>
+                                <div class="text-[11px] text-stone-400">Direct to Bank A/c</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 MoTA Schemes Overview Grid -->
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-base font-bold text-stone-800">The 5 Central Schemes Under MoTA</h3>
+                        <span class="text-xs text-stone-500">All managed via single APAAR student ID</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                        <!-- Scheme 1 -->
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 hover:border-emerald-500 transition shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-stone-400 uppercase">Class 9 & 10</div>
+                                <div class="text-xs font-bold text-stone-800 mt-1">Pre-Matric ST</div>
+                                <div class="text-[11px] text-stone-500 mt-1">₹3,500/yr day-scholar aid for school retention.</div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                                <span class="text-stone-400 font-medium">Completed</span>
+                                <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            </div>
+                        </div>
+
+                        <!-- Scheme 2 -->
+                        <div class="bg-emerald-50/60 p-3.5 rounded-xl border-2 border-emerald-600 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-bold text-emerald-800 uppercase">Class 11 to PG</span>
+                                    <span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.2 rounded font-semibold">Active</span>
+                                </div>
+                                <div class="text-xs font-bold text-emerald-900 mt-1">Post-Matric ST</div>
+                                <div class="text-[11px] text-emerald-800 mt-1">Full fees + ₹1,200/mo hostel maintenance.</div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-emerald-200 flex items-center justify-between text-[11px]">
+                                <span class="text-emerald-800 font-bold">In Progress</span>
+                                <i class="fa-solid fa-spinner fa-spin text-emerald-700"></i>
+                            </div>
+                        </div>
+
+                        <!-- Scheme 3 -->
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 hover:border-emerald-500 transition shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-stone-400 uppercase">IITs, IIMs, AIIMS</div>
+                                <div class="text-xs font-bold text-stone-800 mt-1">Top Class Education</div>
+                                <div class="text-[11px] text-stone-500 mt-1">Full tuition + ₹86,000 living & laptop grant.</div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                                <span class="text-stone-500">Eligible on Admission</span>
+                                <button onclick="simulateCheck('topclass')" class="text-forest font-semibold hover:underline">Check</button>
+                            </div>
+                        </div>
+
+                        <!-- Scheme 4 -->
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 hover:border-emerald-500 transition shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-stone-400 uppercase">M.Phil & Ph.D.</div>
+                                <div class="text-xs font-bold text-stone-800 mt-1">National Fellowship (NFST)</div>
+                                <div class="text-[11px] text-stone-500 mt-1">₹37,000/mo JRF stipend via Canara Bank SFMP.</div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                                <span class="text-stone-500">Requires UGC-NET</span>
+                                <button onclick="simulateCheck('nfst')" class="text-forest font-semibold hover:underline">Details</button>
+                            </div>
+                        </div>
+
+                        <!-- Scheme 5 -->
+                        <div class="bg-white p-3.5 rounded-xl border border-stone-200 hover:border-emerald-500 transition shadow-xs flex flex-col justify-between">
+                            <div>
+                                <div class="text-[10px] font-bold text-stone-400 uppercase">Abroad Studies</div>
+                                <div class="text-xs font-bold text-stone-800 mt-1">National Overseas (NOS)</div>
+                                <div class="text-[11px] text-stone-500 mt-1">100% tuition + USD/GBP allowance for Masters/Ph.D.</div>
+                            </div>
+                            <div class="mt-3 pt-2 border-t border-stone-100 flex items-center justify-between text-[11px]">
+                                <span class="text-stone-500">Top 500 Universities</span>
+                                <button onclick="simulateCheck('nos')" class="text-forest font-semibold hover:underline">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- TAB 2: JAGO MULTILINGUAL VOICE AI STUDIO -->
+            <section id="tab-jago" class="tab-content hidden space-y-6">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">Digital India Bhashini Integrated</span>
+                            <span class="text-xs text-stone-400">•</span>
+                            <span class="text-xs text-stone-500">Vernacular Voice Assistance</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-800 mt-1">JAGO AI Voice Assistant</h2>
+                        <p class="text-stone-600 text-sm mt-0.5">Speak in your mother tongue. JAGO reads live scholarship databases and answers out loud.</p>
+                    </div>
+
+                    <!-- Language Selector Bar -->
+                    <div class="flex items-center bg-stone-100 p-1.5 rounded-xl gap-1 border border-stone-200">
+                        <button onclick="setVoiceLang('hi')" id="vlang-hi" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-forest text-white transition shadow-xs">हिन्दी</button>
+                        <button onclick="setVoiceLang('en')" id="vlang-en" class="text-xs font-medium px-3 py-1.5 rounded-lg text-stone-600 hover:text-stone-900 transition">English</button>
+                        <button onclick="setVoiceLang('sat')" id="vlang-sat" class="text-xs font-medium px-3 py-1.5 rounded-lg text-stone-600 hover:text-stone-900 transition">ᱥᱟᱱᱛᱟᱲᱤ (Santhali)</button>
+                        <button onclick="setVoiceLang('te')" id="vlang-te" class="text-xs font-medium px-3 py-1.5 rounded-lg text-stone-600 hover:text-stone-900 transition">తెలుగు</button>
+                    </div>
+                </div>
+
+                <!-- 2-Column Voice Interaction Studio -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Left: Interactive Microphone & Voice Control -->
+                    <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between h-full">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold uppercase tracking-wider text-stone-400">Microphone Input</span>
+                                <span id="mic-status-badge" class="text-[11px] bg-stone-100 text-stone-600 px-2 py-0.5 rounded-full font-medium">Ready</span>
+                            </div>
+
+                            <!-- Big Center Mic Button -->
+                            <div class="flex flex-col items-center justify-center my-8">
+                                <button onclick="toggleVoiceIntake()" id="main-mic-btn" class="h-24 w-24 rounded-full bg-forest text-white text-3xl flex items-center justify-center shadow-lg hover-bg-forest transition transform hover:scale-105 active:scale-95">
+                                    <i class="fa-solid fa-microphone" id="mic-icon"></i>
+                                </button>
+                                <div class="text-sm font-bold text-stone-800 mt-4" id="mic-label">Tap to Speak to JAGO</div>
+                                <div class="text-xs text-stone-500 mt-1" id="mic-sublabel">Ask about pending files, DBT dates, or missing documents</div>
+                            </div>
+
+                            <!-- Live Spoken Transcript -->
+                            <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2">
+                                <div class="text-[10px] font-bold text-stone-400 uppercase tracking-wider">You Said:</div>
+                                <p id="voice-transcript" class="text-sm font-medium text-stone-700 italic">"Mera Post-Matric scholarship kab aayega aur kaunsa document baaki hai?"</p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Spoken Prompts -->
+                        <div class="mt-6 pt-4 border-t border-stone-100">
+                            <div class="text-xs font-bold text-stone-600 mb-2">Tap a Sample Question:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="askPreset('status')" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-1.5 rounded-lg border border-stone-200 transition">
+                                    "Why is my application pending?"
+                                </button>
+                                <button onclick="askPreset('dbt')" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-1.5 rounded-lg border border-stone-200 transition">
+                                    "Check DBT bank account link"
+                                </button>
+                                <button onclick="askPreset('eligibility')" class="text-xs bg-stone-100 hover:bg-stone-200 text-stone-700 px-3 py-1.5 rounded-lg border border-stone-200 transition">
+                                    "Am I eligible for Top Class Scheme?"
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: JAGO Spoken Response & Live Action Center -->
+                    <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm flex flex-col justify-between h-full">
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-7 w-7 rounded-full bg-terracotta text-white flex items-center justify-center text-xs font-bold">
+                                        <i class="fa-solid fa-robot"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-stone-800">JAGO Verified Response</span>
+                                </div>
+                                <button onclick="replayVoice()" title="Replay Voice Audio" class="text-xs text-forest hover:text-emerald-700 font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-volume-high"></i> Listen Again
+                                </button>
+                            </div>
+
+                            <!-- Conversational Response Bubble -->
+                            <div class="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl mt-4 space-y-3">
+                                <p id="jago-speech-bubble" class="text-sm text-stone-800 leading-relaxed font-medium">
+                                    "Namaste Ananya! Aapka Post-Matric Scholarship application BIT Mesra college se verify ho chuka hai. Abhi yeh Jharkhand State Welfare Officer ke approval batch me hai. Sabhi DigiLocker documents complete hain aur aapka SBI bank account Aadhaar se seeded hai. Paisa 7 din me aapke khate me transfer ho jayega."
+                                </p>
+                                <div class="flex items-center gap-2 text-[11px] text-emerald-800 font-semibold pt-1">
+                                    <i class="fa-solid fa-circle-check text-emerald-600"></i> No Missing Documents • Zero Deficiencies
+                                </div>
+                            </div>
+
+                            <!-- Live Action Card Derived from Answer -->
+                            <div class="mt-4 p-4 rounded-xl border border-stone-200 bg-stone-50 space-y-2">
+                                <div class="text-xs font-bold text-stone-700 flex items-center gap-2">
+                                    <i class="fa-solid fa-bolt text-terracotta"></i> Recommended Next Step
+                                </div>
+                                <p class="text-xs text-stone-600" id="jago-action-desc">
+                                    Your application is progressing normally. You do not need to visit any cyber cafe or submit physical papers.
+                                </p>
+                                <div class="pt-2 flex gap-2">
+                                    <button onclick="switchTab('verification')" class="text-xs bg-forest hover-bg-forest text-white px-3 py-1.5 rounded-lg font-semibold transition">
+                                        View DigiLocker Proofs
+                                    </button>
+                                    <button onclick="downloadSanctionLetter()" class="text-xs bg-white text-stone-700 border border-stone-200 px-3 py-1.5 rounded-lg font-semibold hover:bg-stone-100 transition">
+                                        Download Acknowledgement
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- System Confidence & Audit Info -->
+                        <div class="mt-6 pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+                            <span>Response Source: NSP & PFMS Real-Time APIs</span>
+                            <span>Latency: 280ms • Verified ✅</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- TAB 3: DIGILOCKER & APAAR VERIFICATION -->
+            <section id="tab-verification" class="tab-content hidden space-y-6">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">100% Paperless</span>
+                            <span class="text-xs text-stone-400">•</span>
+                            <span class="text-xs text-stone-500">Government DPI Integration</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-800 mt-1">DigiLocker & APAAR Digital Wallet</h2>
+                        <p class="text-stone-600 text-sm mt-0.5">Automated cryptographic verification of certificates without manual photocopy submissions.</p>
+                    </div>
+                    <button onclick="refreshDigiLocker()" class="bg-forest hover-bg-forest text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-rotate"></i> Sync DigiLocker
+                    </button>
+                </div>
+
+                <!-- 4 Document Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- ST Certificate -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-emerald-50 text-forest flex items-center justify-center font-bold text-lg">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-stone-800">Scheduled Tribe (ST) Certificate</h4>
+                                    <div class="text-[11px] text-stone-500">Issuer: Dept. of Revenue, Govt. of Jharkhand</div>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">Verified</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-xl text-xs space-y-1 font-mono text-stone-600">
+                            <div>Cert No: <span class="font-bold text-stone-800">JH/ST/2022/89412</span></div>
+                            <div>Community: <span class="font-bold text-stone-800">Santhal (Scheduled Tribe)</span></div>
+                        </div>
+                        <div class="text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-lock"></i> Signed with DigiLocker PKI SHA-256
+                        </div>
+                    </div>
+
+                    <!-- Income Certificate -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-emerald-50 text-forest flex items-center justify-center font-bold text-lg">
+                                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-stone-800">Annual Family Income Certificate</h4>
+                                    <div class="text-[11px] text-stone-500">Issuer: Circle Officer, Ranchi SDO</div>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">Verified</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-xl text-xs space-y-1 font-mono text-stone-600">
+                            <div>Annual Income: <span class="font-bold text-stone-800">₹ 1,40,000 / Year</span></div>
+                            <div>Eligibility Ceiling: <span class="font-bold text-emerald-700">Under ₹ 2,50,000 Limit (Eligible)</span></div>
+                        </div>
+                        <div class="text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-check-double"></i> Valid for Complete Academic Year 2026-27
+                        </div>
+                    </div>
+
+                    <!-- APAAR & Academic Records -->
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-emerald-50 text-forest flex items-center justify-center font-bold text-lg">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-stone-800">Academic & Institute Credentials</h4>
+                                    <div class="text-[11px] text-stone-500">Source: APAAR & AISHE Registry</div>
+                                </div>
+                            </div>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">Verified</span>
+                        </div>
+                        <div class="bg-stone-50 p-3 rounded-xl text-xs space-y-1 font-mono text-stone-600">
+                            <div>APAAR ID: <span class="font-bold text-stone-800">9482-1049-5821</span></div>
+                            <div>Institution: <span class="font-bold text-stone-800">Birla Institute of Technology (BIT Mesra)</span></div>
+                            <div>AISHE Code: <span class="font-bold text-stone-800">U-0205 (Accredited)</span></div>
+                        </div>
+                        <div class="text-[11px] text-emerald-700 flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-link"></i> Auto-synced with NTA & Semester Rolls
+                        </div>
+                    </div>
+
+                    <!-- Soft Exception Resolver Demonstration -->
+                    <div class="bg-amber-50/70 p-5 rounded-2xl border border-amber-300 shadow-sm space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-lg">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-stone-800">Soft Mismatch Exception Resolver</h4>
+                                    <div class="text-[11px] text-amber-800">Non-blocking validation safeguard</div>
+                                </div>
+                            </div>
+                            <span class="bg-amber-200 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded">Handled</span>
+                        </div>
+                        <p class="text-xs text-stone-700">
+                            <strong>How we prevent unfair rejections:</strong> If a student's name is spelled <em>"Ananya Soren"</em> on Aadhaar but <em>"Ananya S"</em> on their marksheet, our AI doesn't reject the application. It routes a 1-click confirmation to the college nodal officer.
+                        </p>
+                        <div class="flex items-center justify-between pt-1">
+                            <span class="text-[11px] text-stone-500">Status: Nodal Officer approved on 16 Aug</span>
+                            <span class="text-xs font-bold text-emerald-700">No Blockade ✅</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- TAB 4: SINGLE-AVAIL GUARD & SCHEMES -->
+            <section id="tab-schemes" class="tab-content hidden space-y-6">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-0.5 rounded-full font-semibold">Integrity Engine</span>
+                        <span class="text-xs text-stone-400">•</span>
+                        <span class="text-xs text-stone-500">Cross-Portal De-Duplication</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-stone-800 mt-1">Single-Avail & De-Duplication Guard</h2>
+                    <p class="text-stone-600 text-sm mt-0.5">Central policy states a student cannot draw two scholarships simultaneously. Our system prevents accidental duplicate claims without disqualifying the student.</p>
+                </div>
+
+                <!-- Simulation Playground -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+                    <h3 class="text-base font-bold text-stone-800">Simulate Cross-Portal Dual-Claim Detection</h3>
+                    <p class="text-xs text-stone-600">See what happens when a student tries to apply for another scholarship while already holding an active grant:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                        <button onclick="testConflict('safe')" class="p-4 rounded-xl border border-stone-200 text-left hover:border-emerald-600 transition bg-stone-50 hover:bg-white">
+                            <div class="text-xs font-bold text-emerald-700">Scenario A: Normal Progression</div>
+                            <div class="text-xs text-stone-600 mt-1">Moving from Pre-Matric (Class 10) to Post-Matric (Class 11).</div>
+                        </button>
+                        <button onclick="testConflict('dual')" class="p-4 rounded-xl border border-stone-200 text-left hover:border-amber-600 transition bg-stone-50 hover:bg-white">
+                            <div class="text-xs font-bold text-amber-700">Scenario B: Overlapping Claim</div>
+                            <div class="text-xs text-stone-600 mt-1">Attempting to claim Post-Matric and Top-Class in the same year.</div>
+                        </button>
+                        <button onclick="testConflict('fellowship')" class="p-4 rounded-xl border border-stone-200 text-left hover:border-purple-600 transition bg-stone-50 hover:bg-white">
+                            <div class="text-xs font-bold text-purple-700">Scenario C: Transition to Ph.D.</div>
+                            <div class="text-xs text-stone-600 mt-1">Graduating to National Fellowship (NFST) via Canara Bank.</div>
+                        </button>
+                    </div>
+
+                    <!-- Conflict Output Box -->
+                    <div id="conflict-box" class="p-5 rounded-2xl border border-stone-200 bg-stone-50 space-y-2">
+                        <div class="text-xs font-bold text-stone-500 uppercase tracking-wider">Engine Evaluation:</div>
+                        <div class="text-sm font-bold text-emerald-800" id="conflict-title">✅ No Conflicts Detected</div>
+                        <p class="text-xs text-stone-700" id="conflict-desc">
+                            The student's Pre-Matric tenure completed in March 2025. Applying for Post-Matric for the 2026-27 session is completely compliant with MoTA Single-Avail regulations.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- TAB 5: ZERO-DROPOUT OUTREACH RADAR -->
+            <section id="tab-outreach" class="tab-content hidden space-y-6">
+                <!-- Header -->
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-terracotta text-white text-xs px-2.5 py-0.5 rounded-full font-semibold">MoTA Admin Intelligence</span>
+                            <span class="text-xs text-stone-400">•</span>
+                            <span class="text-xs text-stone-500">Proactive Beneficiary Outreach</span>
+                        </div>
+                        <h2 class="text-2xl font-bold text-stone-800 mt-1">Zero-Dropout Discovery Radar</h2>
+                        <p class="text-stone-600 text-sm mt-0.5">Matching UDISE+ and APAAR school enrollment against scholarship rolls to find unreached tribal children.</p>
+                    </div>
+                    <div class="text-xs bg-stone-100 text-stone-700 px-3 py-2 rounded-xl border border-stone-200 font-mono">
+                        Formula: Unreached = UDISE+ Enrolled - Active Beneficiaries
+                    </div>
+                </div>
+
+                <!-- District Penetration Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                        <div class="text-xs font-bold text-stone-400 uppercase">District: Khunti (Jharkhand)</div>
+                        <div class="text-2xl font-bold text-stone-800 mt-2">1,420 Students</div>
+                        <div class="text-xs text-amber-700 mt-1 font-semibold">Enrolled in School, but NO Scholarship Claimed</div>
+                        <div class="mt-3 pt-3 border-t border-stone-100 flex justify-between items-center text-xs">
+                            <span class="text-stone-500">PVTG Concentration: High</span>
+                            <button onclick="alert('Mobile Camp request logged for Khunti District Tribal Welfare Office!')" class="text-forest font-bold hover:underline">Dispatch Camp</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                        <div class="text-xs font-bold text-stone-400 uppercase">District: Mayurbhanj (Odisha)</div>
+                        <div class="text-2xl font-bold text-stone-800 mt-2">2,180 Students</div>
+                        <div class="text-xs text-amber-700 mt-1 font-semibold">Enrolled in School, but NO Scholarship Claimed</div>
+                        <div class="mt-3 pt-3 border-t border-stone-100 flex justify-between items-center text-xs">
+                            <span class="text-stone-500">PVTG Concentration: Very High</span>
+                            <button onclick="alert('Mobile Camp request logged for Mayurbhanj District Tribal Welfare Office!')" class="text-forest font-bold hover:underline">Dispatch Camp</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
+                        <div class="text-xs font-bold text-stone-400 uppercase">District: Bastar (Chhattisgarh)</div>
+                        <div class="text-2xl font-bold text-stone-800 mt-2">940 Students</div>
+                        <div class="text-xs text-emerald-700 mt-1 font-semibold">92% Scholarship Coverage (Optimal)</div>
+                        <div class="mt-3 pt-3 border-t border-stone-100 flex justify-between items-center text-xs">
+                            <span class="text-stone-500">Status: Highly Active</span>
+                            <span class="text-emerald-700 font-bold">Optimal ✅</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proactive Outreach Map Simulation -->
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                    <h3 class="text-base font-bold text-stone-800 mb-2">Targeted Outreach Dispatch Map</h3>
+                    <p class="text-xs text-stone-600 mb-4">Welfare officers receive automated SMS and WhatsApp lists of villages with the highest gap between school admissions and scholarship registrations.</p>
+                    <div class="bg-stone-50 border border-stone-200 rounded-xl p-8 flex flex-col items-center justify-center text-center">
+                        <div class="h-14 w-14 rounded-full bg-emerald-100 text-forest flex items-center justify-center text-2xl mb-3">
+                            <i class="fa-solid fa-satellite-dish"></i>
+                        </div>
+                        <h4 class="text-sm font-bold text-stone-800">4,540 Unreached Tribal Students Identified Nationally</h4>
+                        <p class="text-xs text-stone-500 max-w-md mt-1">Automated alerts queued for District Welfare Officers (DWOs) to conduct biometric enrollment drives before the 15th October deadline.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Bottom Navigation Bar for Mobile Screens -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-stone-200 px-4 py-2 flex justify-around items-center z-50 shadow-lg">
+        <button onclick="switchTab('dashboard')" class="text-forest flex flex-col items-center text-[10px] font-semibold">
+            <i class="fa-solid fa-table-columns text-base mb-0.5"></i> Dashboard
+        </button>
+        <button onclick="switchTab('jago')" class="text-terracotta flex flex-col items-center text-[10px] font-semibold">
+            <i class="fa-solid fa-microphone text-base mb-0.5"></i> JAGO Voice
+        </button>
+        <button onclick="switchTab('verification')" class="text-stone-500 flex flex-col items-center text-[10px] font-semibold">
+            <i class="fa-solid fa-id-card-clip text-base mb-0.5"></i> DigiLocker
+        </button>
+        <button onclick="switchTab('schemes')" class="text-stone-500 flex flex-col items-center text-[10px] font-semibold">
+            <i class="fa-solid fa-shield-halved text-base mb-0.5"></i> Guard
+        </button>
+        <button onclick="switchTab('outreach')" class="text-stone-500 flex flex-col items-center text-[10px] font-semibold">
+            <i class="fa-solid fa-satellite-dish text-base mb-0.5"></i> Radar
+        </button>
+    </nav>
+
+    <!-- Client-Side Interactive JavaScript Engine -->
+    <script>
+        // State Management
+        let currentLang = 'hi';
+        let isRecording = false;
+        let activeProfile = 'ananya';
+
+        // Profiles for Demo Switch
+        const profiles = {
+            ananya: {
+                name: "Ananya Soren",
+                location: "Ranchi, JH",
+                apaar: "9482-1049-5821",
+                scheme: "Post-Matric ST",
+                inst: "BIT Mesra",
+                amount: "₹ 42,000 / Year",
+                stage: "State Nodal Review",
+                greeting: "Welcome back, Ananya Soren"
+            },
+            birsa: {
+                name: "Birsa Munda",
+                location: "Khunti, JH",
+                apaar: "8120-4921-3910",
+                scheme: "Pre-Matric ST",
+                inst: "Govt High School Khunti",
+                amount: "₹ 3,500 / Year",
+                stage: "School Verified",
+                greeting: "Welcome back, Birsa Munda"
+            }
+        };
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active-tab'));
+
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.remove('hidden');
+
+            const btn = document.getElementById('btn-' + tabId);
+            if (btn) btn.classList.add('active-tab');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle Demo Profile
+        function toggleProfile() {
+            activeProfile = activeProfile === 'ananya' ? 'birsa' : 'ananya';
+            const p = profiles[activeProfile];
+
+            document.getElementById('badge-student-name').textContent = `${p.name} (${p.location}) • APAAR: ${p.apaar}`;
+            document.getElementById('dash-greeting').textContent = p.greeting;
+            document.getElementById('metric-scheme-name').textContent = p.scheme;
+            document.getElementById('metric-amount').textContent = p.amount;
+            document.getElementById('metric-stage').textContent = p.stage;
+        }
+
+        // Language Switcher for JAGO
+        function setVoiceLang(lang) {
+            currentLang = lang;
+            ['hi', 'en', 'sat', 'te'].forEach(l => {
+                const el = document.getElementById('vlang-' + l);
+                if (el) {
+                    if (l === lang) {
+                        el.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-forest text-white transition shadow-xs";
+                    } else {
+                        el.className = "text-xs font-medium px-3 py-1.5 rounded-lg text-stone-600 hover:text-stone-900 transition";
+                    }
+                }
+            });
+
+            const transcript = document.getElementById('voice-transcript');
+            const bubble = document.getElementById('jago-speech-bubble');
+
+            if (lang === 'en') {
+                transcript.textContent = '"When will my Post-Matric scholarship be disbursed and is any document pending?"';
+                bubble.textContent = '"Hello Ananya! Your Post-Matric Scholarship has been verified by BIT Mesra and is currently with the State Welfare Officer. All DigiLocker documents are verified and your Aadhaar-linked SBI bank account is active. Funds will be credited via DBT in 7 days."';
+            } else if (lang === 'hi') {
+                transcript.textContent = '"Mera Post-Matric scholarship kab aayega aur kaunsa document baaki hai?"';
+                bubble.textContent = '"Namaste Ananya! Aapka Post-Matric Scholarship BIT Mesra se verify ho chuka hai. Abhi State Welfare Officer ke approval batch me hai. Sabhi DigiLocker documents complete hain aur SBI bank account active hai. Paisa 7 din me transfer ho jayega."';
+            } else if (lang === 'sat') {
+                transcript.textContent = '"Post-Matric scholarship tin re hijuga ar chet kagoj baaki menaka?"';
+                bubble.textContent = '"Johar Ananya! Aamaga Post-Matric Scholarship BIT Mesra khon verify hoena. State Welfare Officer batch re menaka. DigiLocker kagoj complete menaka. 7 din re poisa bank te hijuga."';
+            } else if (lang === 'te') {
+                transcript.textContent = '"Naa scholarship eppudu vasthundi, emaina documents pending unnaaya?"';
+                bubble.textContent = '"Namaskaram Ananya! Mee Post-Matric Scholarship BIT Mesra nundi verify aindi. State Welfare Officer approval batch lo undi. Mee Aadhaar-linked bank account active ga undi. 7 rojullo payment vasthundi."';
+            }
+        }
+
+        // Voice Intake Toggle & Audio Synthesis
+        function toggleVoiceIntake() {
+            const btn = document.getElementById('main-mic-btn');
+            const icon = document.getElementById('mic-icon');
+            const badge = document.getElementById('mic-status-badge');
+            const label = document.getElementById('mic-label');
+
+            if (!isRecording) {
+                isRecording = true;
+                btn.classList.add('bg-red-600', 'mic-pulsing');
+                btn.classList.remove('bg-forest');
+                icon.className = "fa-solid fa-stop";
+                badge.className = "text-[11px] bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold";
+                badge.textContent = "Listening (Bhashini ASR)...";
+                label.textContent = "Listening... Speak Now";
+
+                setTimeout(() => {
+                    stopVoiceIntake();
+                }, 3500);
+            } else {
+                stopVoiceIntake();
+            }
+        }
+
+        function stopVoiceIntake() {
+            isRecording = false;
+            const btn = document.getElementById('main-mic-btn');
+            const icon = document.getElementById('mic-icon');
+            const badge = document.getElementById('mic-status-badge');
+            const label = document.getElementById('mic-label');
+
+            btn.classList.remove('bg-red-600', 'mic-pulsing');
+            btn.classList.add('bg-forest');
+            icon.className = "fa-solid fa-microphone";
+            badge.className = "text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-medium";
+            badge.textContent = "Processed ✅";
+            label.textContent = "Tap to Speak to JAGO";
+
+            replayVoice();
+        }
+
+        // Voice Readout (Web Speech API)
+        function replayVoice() {
+            const text = document.getElementById('jago-speech-bubble').textContent;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = currentLang === 'hi' ? 'hi-IN' : (currentLang === 'te' ? 'te-IN' : 'en-IN');
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Preset Questions
+        function askPreset(type) {
+            const transcript = document.getElementById('voice-transcript');
+            const bubble = document.getElementById('jago-speech-bubble');
+            const actionDesc = document.getElementById('jago-action-desc');
+
+            if (type === 'status') {
+                transcript.textContent = '"Why is my application pending?"';
+                bubble.textContent = '"Your application is at Stage 3 (State Welfare Officer Batch Review). It was verified by BIT Mesra on 16 Aug. Average batch clearance time is 7 working days."';
+                actionDesc.textContent = 'Everything is in order. You do not need to resubmit documents or visit any office.';
+            } else if (type === 'dbt') {
+                transcript.textContent = '"Check my DBT bank account status"';
+                bubble.textContent = '"Your State Bank of India account ending in 4108 is Aadhaar-seeded and active for Direct Benefit Transfer. No action required."';
+                actionDesc.textContent = 'Your bank account is fully ready to receive direct financial benefits.';
+            } else if (type === 'eligibility') {
+                transcript.textContent = '"Am I eligible for the Top Class Scheme?"';
+                bubble.textContent = '"Yes! BIT Mesra is a notified Top Class Institute under MoTA. Because your annual family income is ₹1.4 Lakh (below the ₹2.5 Lakh limit), you can apply if you secure admission into notified streams."';
+                actionDesc.textContent = 'Top Class scheme covers 100% tuition fees + laptop allowance.';
+            }
+            replayVoice();
+        }
+
+        // Simulate Scheme Check
+        function simulateCheck(scheme) {
+            switchTab('schemes');
+            if (scheme === 'topclass') testConflict('dual');
+            else if (scheme === 'nfst') testConflict('fellowship');
+            else testConflict('safe');
+        }
+
+        // De-Duplication Guard Tester
+        function testConflict(scenario) {
+            const title = document.getElementById('conflict-title');
+            const desc = document.getElementById('conflict-desc');
+
+            if (scenario === 'safe') {
+                title.textContent = "✅ Safe Progression (No Conflict)";
+                title.className = "text-sm font-bold text-emerald-800";
+                desc.textContent = "Transitioning from Pre-Matric (completed in Class 10) to Post-Matric in Class 11 is completely valid. No overlapping benefits detected.";
+            } else if (scenario === 'dual') {
+                title.textContent = "⚠️ Dual-Claim Guard Intercepted";
+                title.className = "text-sm font-bold text-amber-700";
+                desc.textContent = "You currently hold an active Post-Matric ST grant. Applying for Top Class requires a 1-click upgrade transfer. The system will auto-close Post-Matric upon Top Class sanction, preventing accidental duplicate claims.";
+            } else if (scenario === 'fellowship') {
+                title.textContent = "🎓 Higher Education Fellowship Transition";
+                title.className = "text-sm font-bold text-purple-700";
+                desc.textContent = "NFST via Canara Bank SFMP requires UGC-NET scores. Our system cross-checks NTA records and auto-fills your master profile.";
+            }
+        }
+
+        // Sync DigiLocker
+        function refreshDigiLocker() {
+            alert("DigiLocker Synced! 3 Certificates refreshed with SHA-256 digital signatures.");
+        }
+
+        // Download Sanction Letter
+        function downloadSanctionLetter() {
+            alert("Downloading MoTA Acknowledgement Slip for App ID: MOTA-JH-2026-78419");
+        }
+    </script>
+</body>
+</html>
