@@ -75,12 +75,165 @@
                 <i class="fa-solid fa-user-check"></i>
                 <span id="badge-student-name">Ananya Soren (Ranchi, JH) • APAAR: 9482-1049-5821</span>
             </div>
-            <button onclick="toggleProfile()" title="Switch Demo Profile" class="text-white hover:text-emerald-200 text-xs px-2.5 py-1.5 rounded-lg border border-white/20 transition flex items-center gap-1.5">
+            <button onclick="openLoginModal()" title="Switch Account / Login" class="bg-white/10 hover:bg-white/20 text-white text-xs px-2.5 py-1.5 rounded-lg border border-white/25 transition flex items-center gap-1.5 shadow-xs">
+                <i class="fa-solid fa-right-to-bracket text-emerald-300"></i>
+                <span class="font-medium">Login / Switch</span>
+            </button>
+            <button onclick="toggleProfile()" title="Toggle Demo Profile" class="text-white/80 hover:text-emerald-200 text-xs px-2 py-1.5 rounded-lg border border-white/15 transition flex items-center gap-1">
                 <i class="fa-solid fa-arrows-rotate"></i>
-                <span class="hidden sm:inline">Switch Profile</span>
+                <span class="hidden sm:inline">Toggle</span>
             </button>
         </div>
     </header>
+
+    <!-- JUDGE & STUDENT LOGIN MODAL OVERLAY -->
+    <div id="login-modal-overlay" class="fixed inset-0 bg-stone-900/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl shadow-2xl border border-stone-200 max-w-2xl w-full p-6 sm:p-7 relative my-auto animate-fade-in">
+            <!-- Modal Header -->
+            <div class="flex items-start justify-between pb-4 border-b border-stone-100">
+                <div class="flex items-center gap-3">
+                    <div class="h-11 w-11 rounded-2xl bg-forest text-white flex items-center justify-center text-xl shadow-md">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h2 class="text-xl font-bold text-stone-900">Eklavya Setu Portal Login</h2>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">MoTA • SIH26238</span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-0.5">Unified Tribal Scholarship Portal & JAGO AI Voice Assistant</p>
+                    </div>
+                </div>
+                <button onclick="closeLoginModal()" title="Close" class="text-stone-400 hover:text-stone-700 h-8 w-8 rounded-full hover:bg-stone-100 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Two Login Choices Banner -->
+            <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-3.5 my-4 flex items-center gap-3">
+                <i class="fa-solid fa-circle-info text-forest text-lg shrink-0"></i>
+                <p class="text-xs text-stone-700 leading-relaxed">
+                    <strong>For Evaluators & Judges:</strong> You can either <strong>click any pre-seeded tribal student profile</strong> below for an instant walkthrough, or <strong>input your own test student data / APAAR ID</strong>!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                <!-- Option A: Fast 1-Click Pre-Seeded Profiles -->
+                <div class="space-y-3 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bolt text-amber-500"></i> Option A: Fast Seeded Logins
+                        </span>
+                        <p class="text-xs text-stone-500 mt-0.5 mb-2.5">Click any seeded student to explore their status:</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <!-- Seed 1: Ananya Soren -->
+                        <button onclick="loginWithSeeded('ananya')" class="w-full text-left p-3 rounded-2xl border border-stone-200 hover:border-forest hover:bg-emerald-50/50 transition flex items-center justify-between group shadow-2xs">
+                            <div class="flex items-center gap-3">
+                                <div class="h-9 w-9 rounded-xl bg-forest/10 text-forest font-bold flex items-center justify-center text-sm group-hover:bg-forest group-hover:text-white transition">
+                                    <i class="fa-solid fa-user-graduate"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-stone-900">Ananya Soren (Ranchi, JH)</div>
+                                    <div class="text-[11px] text-stone-500">Post-Matric ST • BIT Mesra • ₹42,000 DBT</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-forest font-bold group-hover:translate-x-0.5 transition"><i class="fa-solid fa-arrow-right"></i></span>
+                        </button>
+
+                        <!-- Seed 2: Birsa Munda -->
+                        <button onclick="loginWithSeeded('birsa')" class="w-full text-left p-3 rounded-2xl border border-stone-200 hover:border-forest hover:bg-emerald-50/50 transition flex items-center justify-between group shadow-2xs">
+                            <div class="flex items-center gap-3">
+                                <div class="h-9 w-9 rounded-xl bg-terracotta/10 text-terracotta font-bold flex items-center justify-center text-sm group-hover:bg-terracotta group-hover:text-white transition">
+                                    <i class="fa-solid fa-school"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-stone-900">Birsa Munda (Khunti, JH)</div>
+                                    <div class="text-[11px] text-stone-500">Pre-Matric ST • High School • ₹3,500 DBT</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-forest font-bold group-hover:translate-x-0.5 transition"><i class="fa-solid fa-arrow-right"></i></span>
+                        </button>
+
+                        <!-- Seed 3: Priya Marandi (Top Class IIT) -->
+                        <button onclick="loginWithSeeded('priya')" class="w-full text-left p-3 rounded-2xl border border-stone-200 hover:border-forest hover:bg-emerald-50/50 transition flex items-center justify-between group shadow-2xs">
+                            <div class="flex items-center gap-3">
+                                <div class="h-9 w-9 rounded-xl bg-amber-500/10 text-amber-700 font-bold flex items-center justify-center text-sm group-hover:bg-amber-600 group-hover:text-white transition">
+                                    <i class="fa-solid fa-award"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-stone-900">Priya Marandi (IIT Kharagpur)</div>
+                                    <div class="text-[11px] text-stone-500">Top Class Education • Full Tuition + ₹86k</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-forest font-bold group-hover:translate-x-0.5 transition"><i class="fa-solid fa-arrow-right"></i></span>
+                        </button>
+
+                        <!-- Seed 4: Devendra Naik (NFST Ph.D.) -->
+                        <button onclick="loginWithSeeded('devendra')" class="w-full text-left p-3 rounded-2xl border border-stone-200 hover:border-forest hover:bg-emerald-50/50 transition flex items-center justify-between group shadow-2xs">
+                            <div class="flex items-center gap-3">
+                                <div class="h-9 w-9 rounded-xl bg-purple-500/10 text-purple-700 font-bold flex items-center justify-center text-sm group-hover:bg-purple-600 group-hover:text-white transition">
+                                    <i class="fa-solid fa-microscope"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-stone-900">Devendra Naik (Bastar, CG)</div>
+                                    <div class="text-[11px] text-stone-500">NFST Doctoral Fellowship • ₹37,000/mo</div>
+                                </div>
+                            </div>
+                            <span class="text-xs text-forest font-bold group-hover:translate-x-0.5 transition"><i class="fa-solid fa-arrow-right"></i></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Option B: Custom Student / Evaluator Profile -->
+                <div class="space-y-3 bg-stone-50/70 p-4 rounded-2xl border border-stone-200 flex flex-col justify-between">
+                    <div>
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-keyboard text-emerald-600"></i> Option B: Enter Custom Student
+                        </span>
+                        <p class="text-xs text-stone-500 mt-0.5 mb-2.5">Input your own test data as student or judge:</p>
+
+                        <div class="space-y-2.5">
+                            <div>
+                                <label class="text-[11px] font-semibold text-stone-700 block mb-0.5">Student / Judge Name</label>
+                                <input type="text" id="custom-student-name" placeholder="e.g. Dr. Rajesh Sharma (Judge)" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:border-forest focus:ring-1 focus:ring-forest transition" />
+                            </div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-stone-700 block mb-0.5">District & State</label>
+                                    <input type="text" id="custom-student-loc" placeholder="e.g. Mayurbhanj, Odisha" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:border-forest transition" />
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-semibold text-stone-700 block mb-0.5">APAAR ID (12-Digit)</label>
+                                    <input type="text" id="custom-student-apaar" placeholder="e.g. 7810-4491-9920" class="w-full bg-white border border-stone-300 rounded-xl px-3 py-1.5 text-xs text-stone-800 focus:outline-none focus:border-forest transition" />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-semibold text-stone-700 block mb-0.5">Select Scheme to Track / Apply</label>
+                                <select id="custom-student-scheme" class="w-full bg-white border border-stone-300 rounded-xl px-2.5 py-1.5 text-xs text-stone-800 focus:outline-none focus:border-forest transition">
+                                    <option value="postmatric">Post-Matric Scholarship (Class 11 to PG - ₹42,000)</option>
+                                    <option value="prematric">Pre-Matric Scholarship (Class 9 & 10 - ₹3,500)</option>
+                                    <option value="topclass">Top Class Education (IITs/IIMs/NITs - Full Tuition)</option>
+                                    <option value="nfst">National Fellowship / NFST (Ph.D. - ₹37,000/mo)</option>
+                                    <option value="nos">National Overseas Scholarship / NOS (Abroad)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="loginWithCustomStudent()" class="w-full mt-3 bg-forest hover-bg-forest text-white py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
+                        <i class="fa-solid fa-check"></i> Continue with Custom Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer Note -->
+            <div class="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between text-[11px] text-stone-400">
+                <span>DPI Integrated (DigiLocker & APAAR) • MoTA Central Portal</span>
+                <span class="text-forest font-semibold cursor-pointer hover:underline" onclick="loginWithSeeded('ananya')">Skip & Launch Default (Ananya Soren) &rarr;</span>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Container Layout -->
     <div class="flex-grow flex flex-col md:flex-row max-w-7xl w-full mx-auto p-4 md:p-6 gap-6">
@@ -710,7 +863,7 @@
         let isRecording = false;
         let activeProfile = 'ananya';
 
-        // Profiles for Demo Switch
+        // Profiles for Demo Switch & Seeded Logins
         const profiles = {
             ananya: {
                 name: "Ananya Soren",
@@ -731,8 +884,95 @@
                 amount: "₹ 3,500 / Year",
                 stage: "School Verified",
                 greeting: "Welcome back, Birsa Munda"
+            },
+            priya: {
+                name: "Priya Marandi",
+                location: "Kharagpur, WB",
+                apaar: "7821-3310-4491",
+                scheme: "Top Class Education (IIT)",
+                inst: "IIT Kharagpur",
+                amount: "Full Tuition + ₹ 86,000 Allowance",
+                stage: "MoTA Sanction Batch",
+                greeting: "Welcome back, Priya Marandi"
+            },
+            devendra: {
+                name: "Devendra Naik",
+                location: "Bastar, CG",
+                apaar: "6519-8820-1102",
+                scheme: "National Fellowship (NFST Ph.D.)",
+                inst: "Bastar University",
+                amount: "₹ 37,000 / Month (JRF)",
+                stage: "Canara Bank SFMP Disbursement",
+                greeting: "Welcome back, Devendra Naik"
             }
         };
+
+        // Login Modal Controls
+        function openLoginModal() {
+            const overlay = document.getElementById('login-modal-overlay');
+            if (overlay) overlay.classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            const overlay = document.getElementById('login-modal-overlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        function loginWithSeeded(key) {
+            applyProfile(key);
+            switchTab('dashboard');
+            closeLoginModal();
+        }
+
+        function loginWithCustomStudent() {
+            const name = document.getElementById('custom-student-name').value.trim() || "Evaluator / Test Student";
+            const loc = document.getElementById('custom-student-loc').value.trim() || "Ranchi, Jharkhand";
+            const apaar = document.getElementById('custom-student-apaar').value.trim() || "9988-7766-5544";
+            const schemeVal = document.getElementById('custom-student-scheme').value;
+
+            let schemeName = "Post-Matric ST";
+            let amount = "₹ 42,000 / Year";
+            let stage = "State Nodal Review";
+
+            if (schemeVal === 'prematric') {
+                schemeName = "Pre-Matric ST";
+                amount = "₹ 3,500 / Year";
+                stage = "School Principal Verified";
+            } else if (schemeVal === 'topclass') {
+                schemeName = "Top Class Education Scheme";
+                amount = "Full Tuition + ₹ 86,000";
+                stage = "Premier Institute Verified";
+            } else if (schemeVal === 'nfst') {
+                schemeName = "National Fellowship (NFST)";
+                amount = "₹ 37,000 / Month";
+                stage = "UGC-NET JRF Validated";
+            } else if (schemeVal === 'nos') {
+                schemeName = "National Overseas Scholarship";
+                amount = "100% Tuition + USD Allowance";
+                stage = "MoTA Committee Review";
+            }
+
+            // Update UI elements
+            document.getElementById('badge-student-name').textContent = `${name} (${loc.split(',')[0]}) • APAAR: ${apaar}`;
+            document.getElementById('dash-greeting').textContent = `Welcome back, ${name}`;
+            document.getElementById('metric-scheme-name').textContent = schemeName;
+            document.getElementById('metric-amount').textContent = amount;
+            document.getElementById('metric-stage').textContent = stage;
+
+            switchTab('dashboard');
+            closeLoginModal();
+        }
+
+        function applyProfile(key) {
+            activeProfile = key;
+            const p = profiles[key] || profiles.ananya;
+
+            document.getElementById('badge-student-name').textContent = `${p.name} (${p.location}) • APAAR: ${p.apaar}`;
+            document.getElementById('dash-greeting').textContent = p.greeting;
+            document.getElementById('metric-scheme-name').textContent = p.scheme;
+            document.getElementById('metric-amount').textContent = p.amount;
+            document.getElementById('metric-stage').textContent = p.stage;
+        }
 
         // Tab Switching
         function switchTab(tabId) {
@@ -904,6 +1144,12 @@
         function downloadSanctionLetter() {
             alert("Downloading MoTA Acknowledgement Slip for App ID: MOTA-JH-2026-78419");
         }
+
+        // Initialize on page load - Always open login modal first
+        window.addEventListener('DOMContentLoaded', () => {
+            applyProfile('ananya');
+            openLoginModal();
+        });
     </script>
 </body>
 </html>
